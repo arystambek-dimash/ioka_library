@@ -7,7 +7,7 @@ class Order:
         self._api = api
         self.__headers__ = headers
 
-    def create(self, data: dict):
+    def create_order(self, data: dict):
         path = "v2/orders/"
         params = {
             "amount": data.get("amount"),
@@ -18,12 +18,12 @@ class Order:
         result = self._api.post(path, data=params, headers=self.__headers__)
         return utils.from_json(result).get('response', '')
 
-    def orders(self):
+    def get_orders(self):
         path = "v2/orders/"
         result = self._api.post(path, data={}, headers=self.__headers__)
         return utils.from_json(result).get('response', '')
 
-    def order(self, order_id):
+    def get_order_by_id(self, order_id):
         path = f"v2/orders/{order_id}"
         params = {
             'order_id': order_id
@@ -32,7 +32,7 @@ class Order:
         result = self._api.post(path, data={}, headers=self.__headers__)
         return utils.from_json(result).get('response', '')
 
-    def cancel(self, data, order_id):
+    def cancel_order(self, data, order_id):
         path = f"v2/orders/{order_id}/cancel"
         params = {
             'order_id': data.get("reason")
