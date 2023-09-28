@@ -15,6 +15,10 @@ def to_json(data):
     return json.dumps(data)
 
 
+def from_json(json_string):
+    return json.loads(json_string)
+
+
 def join_url(url, *paths):
     for path in paths:
         url = re.sub(r'/?$', re.sub(r'^/?', '/', path), url)
