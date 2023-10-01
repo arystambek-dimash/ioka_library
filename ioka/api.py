@@ -1,4 +1,4 @@
-from helpers import get_request_type
+from ioka.helpers import get_request_type
 from ioka import exceptions
 
 import os
@@ -7,14 +7,24 @@ import ioka.utils as utils
 
 
 class Api:
-    def __init__(self, **kwargs):
-        self.api_key = kwargs.get("api_key", '')
-        self.request_type = kwargs.get('request_type') or get_request_type('json')
+    API_URL = "https://api.ioka.kz"
+
+    def __init__(self, api_key=None, is_test=False, request_type=None):
+        """
+        Initializes the API class with the given parameters.
+
+        :param api_key: API key for accessing the endpoint.
+                        If not provided, it tries to get it from an environment variable.
+        :param request_type: Type of the request. If not provided, defaults using get_request_type.
+        """
+        self.api_key = api_key or os.environ.get('IOKA_SECRETKEY')
+        if is_test:
+            self.API_URL = "https://stage-api.ioka.kz"
         if not self.api_key:
-            self.api_key = os.environ.get('IOKA_SECRETKEY', '')
-            if not self.api_key:
-                raise ValueError("API key not found")
-        self.api_url = "https://stage-api.ioka.kz"
+            raise ValueError("API key not found")
+
+        self.request_type = request_type or get_request_type('json')
+        self.api_url = self.API_URL
 
     def _headers(self):
         return {
